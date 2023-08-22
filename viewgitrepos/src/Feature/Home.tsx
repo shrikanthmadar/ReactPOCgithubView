@@ -1,21 +1,29 @@
-import Repositories from "./Repositories/Repositories"
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import { useEffect, useState } from "react";
+import Header from "./header/header";
+import { Outlet, Route, Routes, useParams } from "react-router-dom";
 
 function Home() {
-    return (<>
-    <div style={{ padding: "10px" }}>
-                <AppBar position="static" style={{backgroundColor:"white",color:"black"}}>
-                    <Toolbar>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <h1>GitHub Repositories</h1>
-                        </Typography>
-                        
-                    </Toolbar>
-                </AppBar></div>
-    <div><Repositories /></div></>
-    )
-  }
+  const { owner, name } = useParams();
 
-  export default Home
+  let [title, setTitle] = useState("GitHub Repositories");
+  useEffect(() => {
+    if (owner && name) {
+      setTitle("Repository Details");
+    } else {
+      setTitle("GitHub Repositories");
+    }
+  }, [owner, name]);
+  return (
+    <>
+      <div style={{ backgroundColor: "#F6F8FA" }}></div>
+      <div style={{ padding: "10px" }}>
+        <Header title={title} />
+      </div>
+      <div>
+        <Outlet />
+      </div>
+    </>
+  );
+}
+
+export default Home;
