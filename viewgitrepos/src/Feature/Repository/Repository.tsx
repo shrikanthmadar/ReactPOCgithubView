@@ -1,36 +1,22 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card } from "@mui/material";
 import Table from "react-bootstrap/Table";
 import { useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import "./Repository.css";
+import {
+  IRouteParameters,
+  useFetchRepoQuery,
+} from "../../Redux/repo-api/repos-api-slice";
 
 function Repository() {
   const { owner, name } = useParams();
+  const [payload, setPayload] = useState<IRouteParameters>({ owner, name });
+  const { data: repo } = useFetchRepoQuery(payload);
   const navigate = useNavigate();
-
-  const BASE_URL = "https://api.github.com";
-  // const owner='';
-  // const name='';
-  const [repo, setRepo] = useState<any>();
-
-  useEffect(() => {
-    getRpository();
-  }, [owner, name]);
-
-  async function getRpository() {
-    const url = `${BASE_URL}/repos/${owner}/${name}`;
-    try {
-      const res = await fetch(url);
-      const repoData = await res.json();
-      setRepo(repoData);
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   function backToRepositories() {
     navigate(`/Repositories`);
@@ -46,9 +32,9 @@ function Repository() {
                 <Card style={{ height: "100%" }}>
                   <div style={{ padding: "10px" }}>
                     <img
+                      className="profile-img"
                       src={repo?.owner?.avatar_url}
                       alt={`${repo?.owner?.login} 's profile photo`}
-                      style={{ height: "auto", maxWidth: "100%" }}
                     />
                   </div>
                 </Card>
@@ -100,8 +86,8 @@ function Repository() {
                           <td>Watchers</td>
                           <td>{repo?.watchers_count}</td>
                         </tr>
-                        <div>
-                          <div>
+                        <tr>
+                          <td>
                             <Button
                               style={{ backgroundColor: "green" }}
                               variant="contained"
@@ -109,8 +95,8 @@ function Repository() {
                             >
                               Back to Repositioreies
                             </Button>
-                          </div>
-                        </div>
+                          </td>
+                        </tr>
                       </tbody>
                     </Table>
                   </div>

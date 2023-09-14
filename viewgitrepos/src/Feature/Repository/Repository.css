@@ -3,3 +3,12 @@
   justify-content: center;
   align-items: center;
 }
+
+.profile-img {
+  height: auto;
+  max-width: 100%;
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: contain;
+
+}
